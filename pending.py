@@ -8,9 +8,17 @@ import main
 import pivotaltracker
 import cloud
 
+"""
+Function finds the time taken when the story starts to when it is available in qa
+"""
 def generateTimeToQAReady():
     res = []
     
+    """Loops through all stories from all squads and finds the start time by finding the
+    start time of the sprint where the story is first added, and the end time by iterating
+    through the transition history of the story and locating the timestamp when the 'available in qa'
+    label is added
+    """
     for i in constants.PIVOTAL_SQUAD_DETAILS():
         url = constants.PIVOTAL_STORIES_URL(i["Pivotal Tracker Project ID"])
         storiesData = main.fetchData(url, constants.PIVOTAL_HEADERS, None)
@@ -20,7 +28,13 @@ def generateTimeToQAReady():
     cloud.uploadToCloud('StartToQA.csv', res)
     
     return res
-    
+
+"""
+Stories are filtered with the following criteria
+1. Stories belongs to the sprint in the current FY
+2. Stories must have point estimates
+3. Stories state must be accepted (Completed)
+""" 
 def filterAndRefine(stories, sprintList, team, projectID):
     storyList = []
     
@@ -52,6 +66,9 @@ def refine(item, team, projectID):
     
     return data
 
+"""
+Function finds the time between the start of the story to available in qa
+"""
 def getStartToQA(item, team, projectID):
     transitionsUrl = constants.PIVOTAL_STORY_TRANSITIONS_URL(projectID, item["id"])
     historyUrl = constants.PIVOTAL_STORY_HISTORY_URL(projectID, item["id"])

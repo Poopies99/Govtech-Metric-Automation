@@ -3,6 +3,9 @@ import cloud
 import constants
 import build
 
+"""
+Function returns the time taken (in hrs) to repair a failed build
+"""
 def getMeanTimeToRepair():
     data = []
     
@@ -16,6 +19,7 @@ def getMeanTimeToRepair():
 def getMeanTime(buildID, name):
     data = build.getTeamCityData(buildID, name)
     
+    # Reverse the list to arrange data in ascending chronological order
     data = data[::-1]
     
     res = []
@@ -37,7 +41,11 @@ def getMeanTime(buildID, name):
                 res.append(generateData(data, i, index, numberOfBuilds))
             
     return res
-    
+
+"""
+Function returns true if the previous build and the current build are both a failure.
+This prevents double counting the number of failures if there are consecutive build failures
+"""
 def notAnotherFailure(data, index):
     if index == 0:
         return True

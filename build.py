@@ -5,6 +5,9 @@ import main
 import constants
 import cloud
 
+"""
+Function returns Build details
+"""
 def getBuilds():
     data = []
     
@@ -34,7 +37,10 @@ def findSprint(completeTime):
         for i in info:
             if changeTimeFormat(i["End Time"]) > completeTime > changeTimeFormat(i["Start Time"]):
                 return i["Sprint"]
-                
+
+"""
+Function returns the real status of the build by comparing it with data file that shows the real build status
+"""        
 def getFinalStatus(data):
     currentStatus = data["status"]
     temp = []

@@ -4,6 +4,10 @@ import pivotaltracker
 import constants
 import cloud
 
+"""
+Function loops through all squad details and returns the cycle time details
+for stories from each squad in this FY
+"""
 def getCycleTime():
     resStoryData = []
     
@@ -13,17 +17,19 @@ def getCycleTime():
         storyData = filterStory(storyData, i["Squad Name"], i["Current FY First Sprint"], i["Pivotal Tracker Project ID"])
         resStoryData += storyData
         
-        
     cloud.uploadToCloud('Stories.csv', resStoryData)
     
-    # return resStoryData
+    return resStoryData
 
-# Function returns an array of filtered stories
-# Stories are filtered with the following criteria
-# 1. Stories belongs to the sprint in the current FY
-# 2. Stories must have point estimates
-# 3. Stories state must be accepted (Completed)
+"""
+Function returns an array of filtered stories
+Stories are filtered with the following criteria
+1. Stories belongs to the sprint in the current FY
+2. Stories must have point estimates
+3. Stories state must be accepted (Completed)
+"""
 def filterStory(data, team, sprintID, projectID):
+    # An array of all sprint names this FY
     sprintList = pivotaltracker.getSprintList(team, sprintID, projectID)
 
     res = []
@@ -37,7 +43,11 @@ def filterStory(data, team, sprintID, projectID):
                     break
     
     return res
-                
+
+"""
+Function returns the sprint that the story is completed on by iterating from the back of the label array
+where the most recent label is found
+"""              
 def getSprint(item):
     for i in range(len(item["labels"])):
         lastIndex = len(item["labels"]) - 1

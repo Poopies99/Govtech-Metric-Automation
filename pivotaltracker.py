@@ -5,7 +5,10 @@ import datetime
 from datetime import timedelta
 import json
 
-# Returns Sprint Details of Sprints in the Current FY  
+"""
+Function returns Sprint Details of all Sprints occurring after the specified sprintID
+based on the specified team
+"""
 def getSprintData(team, sprintID, projectID):
     url = constants.PIVOTAL_SPRINTS_URL(projectID)
     sprints = main.fetchData(url, constants.PIVOTAL_HEADERS, None) 
@@ -38,7 +41,9 @@ def refineSprintName(name):
 
     return res[:10]
 
-# Returns an array of strings containing the names of sprints4020 onwards
+"""
+Function returns an array of strings containing ONLY the names of the sprints
+"""
 def getSprintList(team, sprintID, projectID):
     sprintList = []
     sprintData = getSprintData(team, sprintID, projectID)
@@ -55,7 +60,9 @@ def getVelocityDetails(team, projectID):
     
     return velocityData
     
-# Convert UTC Time to Local Time
+"""
+Function returns the local time by converting UTC Time to Local Time
+"""
 def adjustToLocalTime(time):
     res = datetime.datetime.strptime(time, constants.DATETIME_DEADLINE_FORMAT)
     
@@ -65,7 +72,10 @@ def adjustToLocalTime(time):
     
     return res.strftime("%Y-%m-%d %H:%M:%S")
 
-# Returns the startTime by substrating each sprint duration  
+"""
+Function returns the startTime by deriving the value from the sprint end date subtracting
+by the sprint duration
+"""
 def findStartTime(time):
     res = datetime.datetime.strptime(time, constants.DATETIME_DEADLINE_FORMAT)
     
